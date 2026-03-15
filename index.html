@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sprite Cathedral</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <canvas id="cathedral"></canvas>
+  <div id="overlay">
+    <div id="header">
+      <h1>SPRITE CATHEDRAL</h1>
+      <p id="status-line">loading village...</p>
+    </div>
+    <div id="tooltip" class="hidden"></div>
+    <div id="detail-panel" class="hidden">
+      <div id="detail-title"></div>
+      <div id="detail-desc"></div>
+      <button id="detail-close">×</button>
+    </div>
+    <div id="footer">powered by OpenClaw</div>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
