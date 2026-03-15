@@ -243,8 +243,12 @@ async function main() {
       }
     }
 
-    // Clear
-    ctx.fillStyle = '#1a2332';
+    // Clear — warm sage background
+    const bgGrad = ctx.createLinearGradient(0, 0, 0, h);
+    bgGrad.addColorStop(0, '#c8d8c0');
+    bgGrad.addColorStop(0.6, '#b0c4a0');
+    bgGrad.addColorStop(1, '#6a9aaa');
+    ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, w, h);
 
     // Draw water shimmer background for bottom rows
@@ -253,7 +257,7 @@ async function main() {
     // Draw ground tiles
     for (const cell of cells) {
       const pos = gridToScreen(cell.col, cell.row, offset.x, offset.y);
-      drawGroundTile(ctx, images[cell.ground], pos.x, pos.y);
+      drawGroundTile(ctx, cell.ground, pos.x, pos.y, now);
     }
 
     // Collect drawables (buildings, props, sprites) and sort by depth

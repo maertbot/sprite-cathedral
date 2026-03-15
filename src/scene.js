@@ -40,33 +40,38 @@ export const PROPS = {
 // Each cell: [ground, building|null, prop|null]
 export const SCENE_MAP = [
   // Row 0: residential top
-  [G,null,null],        [G,null,'tree-round'],    [G,'cottage-red',null], [G,null,'mailbox'],   [G,null,null],          [G,null,'fence-picket'], [G,'cottage-green',null],[G,null,null],        [G,null,'tree-round'],  [G,'saltbox',null],     [G,null,'mailbox'],   [G,null,'tree-evergreen'],
+  [[G,null,null],        [G,null,'tree-round'],    [G,'cottage-red',null], [G,null,'mailbox'],   [G,null,null],          [G,null,'fence-picket'], [G,'cottage-green',null],[G,null,null],        [G,null,'tree-round'],  [G,'saltbox',null],     [G,null,'mailbox'],   [G,null,'tree-evergreen']],
   // Row 1: residential with trees
-  [G,null,'tree-evergreen'],[G,null,null],         [G,null,null],          [G,null,null],        [G,null,'fence-picket'],[G,null,null],           [G,null,null],           [G,null,'fence-picket'],[G,null,null],        [G,null,null],          [G,null,null],        [G,null,'tree-round'],
+  [[G,null,'tree-evergreen'],[G,null,null],         [G,null,null],          [G,null,null],        [G,null,'fence-picket'],[G,null,null],           [G,null,null],           [G,null,'fence-picket'],[G,null,null],        [G,null,null],          [G,null,null],        [G,null,'tree-round']],
   // Row 2: path leading down
-  [G,null,'tree-round'],[G,null,null],             [P,null,null],          [P,null,null],        [P,null,null],          [P,null,null],           [P,null,null],           [P,null,null],        [P,null,null],          [P,null,null],          [G,null,null],        [G,null,'tree-evergreen'],
+  [[G,null,'tree-round'],[G,null,null],             [P,null,null],          [P,null,null],        [P,null,null],          [P,null,null],           [P,null,null],           [P,null,null],        [P,null,null],          [P,null,null],          [G,null,null],        [G,null,'tree-evergreen']],
   // Row 3: Main Street — upper
-  [G,null,null],        [G,'clubhouse',null],      [C,null,null],          [C,'shop',null],      [C,null,null],          [C,'post-office',null],  [C,null,null],           [C,'general-store',null],[C,null,null],       [C,null,'lamppost'],    [G,null,null],        [G,null,null],
+  [[G,null,null],        [G,'clubhouse',null],      [C,null,null],          [C,'shop',null],      [C,null,null],          [C,'post-office',null],  [C,null,null],           [C,'general-store',null],[C,null,null],       [C,null,'lamppost'],    [G,null,null],        [G,null,null]],
   // Row 4: Main Street — lower
-  [G,null,null],        [G,null,'lamppost'],       [C,null,null],          [C,null,null],        [C,null,null],          [C,null,null],           [C,null,null],           [C,null,null],        [C,null,null],          [C,null,null],          [G,null,'lamppost'],  [G,null,null],
+  [[G,null,null],        [G,null,'lamppost'],       [C,null,null],          [C,null,null],        [C,null,null],          [C,null,null],           [C,null,null],           [C,null,null],        [C,null,null],          [C,null,null],          [G,null,'lamppost'],  [G,null,null]],
   // Row 5: The Green
-  [G,null,null],        [G,null,'tree-round'],     [G,null,'bench'],       [G,null,null],        [G,null,'flagpole'],    [G,'gazebo',null],       [G,null,null],           [G,null,'bench'],     [G,null,null],          [G,null,'tree-round'],  [G,null,null],        [G,null,null],
+  [[G,null,null],        [G,null,'tree-round'],     [G,null,'bench'],       [G,null,null],        [G,null,'flagpole'],    [G,'gazebo',null],       [G,null,null],           [G,null,'bench'],     [G,null,null],          [G,null,'tree-round'],  [G,null,null],        [G,null,null]],
   // Row 6: path to harbor
-  [G,null,null],        [G,null,null],             [P,null,null],          [P,null,null],        [P,null,null],          [P,null,null],           [P,null,null],           [P,null,null],        [P,null,null],          [P,null,null],          [G,null,null],        [G,null,null],
+  [[G,null,null],        [G,null,null],             [P,null,null],          [P,null,null],        [P,null,null],          [P,null,null],           [P,null,null],           [P,null,null],        [P,null,null],          [P,null,null],          [G,null,null],        [G,null,null]],
   // Row 7: harbor approach
-  [G,null,null],        [G,null,'tree-evergreen'], [G,null,null],          [P,null,null],        [G,null,null],          [G,null,null],           [G,null,null],           [P,null,null],        [G,null,null],          [G,null,null],          [G,null,null],        [G,null,null],
+  [[G,null,null],        [G,null,'tree-evergreen'], [G,null,null],          [P,null,null],        [G,null,null],          [G,null,null],           [G,null,null],           [P,null,null],        [G,null,null],          [G,null,null],          [G,null,null],        [G,null,null]],
   // Row 8: waterfront
-  [W,null,null],        [W,null,null],             [G,'boathouse',null],   [G,null,null],        [W,null,null],          [W,null,null],           [W,null,null],           [W,null,null],        [W,null,'sailboat'],    [W,null,null],          [W,null,null],        [W,null,null],
+  [[W,null,null],        [W,null,null],             [G,'boathouse',null],   [G,null,null],        [W,null,null],          [W,null,null],           [W,null,null],           [W,null,null],        [W,null,'sailboat'],    [W,null,null],          [W,null,null],        [W,null,null]],
   // Row 9: water
-  [W,null,null],        [W,null,null],             [W,null,null],          [W,null,null],        [W,null,null],          [W,'lighthouse',null],   [W,null,null],           [W,null,null],        [W,null,null],          [W,null,null],          [W,null,null],        [W,null,null],
+  [[W,null,null],        [W,null,null],             [W,null,null],          [W,null,null],        [W,null,null],          [W,'lighthouse',null],   [W,null,null],           [W,null,null],        [W,null,null],          [W,null,null],          [W,null,null],        [W,null,null]],
 ];
 
 // Parse scene map into structured data
 export function parseScene() {
   const cells = [];
   for (let row = 0; row < GRID_ROWS; row++) {
+    const rowData = SCENE_MAP[row];
     for (let col = 0; col < GRID_COLS; col++) {
-      const entry = SCENE_MAP[row][col];
+      const entry = rowData[col];
+      if (!entry) {
+        cells.push({ row, col, ground: G, building: null, prop: null, buildingMeta: null, propMeta: null });
+        continue;
+      }
       const [ground, building, prop] = entry;
       cells.push({
         row, col, ground,
