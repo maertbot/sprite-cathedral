@@ -192,45 +192,6 @@ export function drawGroundTile(ctx, groundType, x, y, time) {
   ctx.stroke();
 }
 
-// Remove sage-green background from tile images at load time
-// by replacing near-sage pixels with transparent
-const _processedImages = new WeakSet();
-
-function processImageTransparency(img) {
-  if (_processedImages.has(img)) return img._transparent || img;
-  _processedImages.add(img);
-  
-  const offscreen = document.createElement('canvas');
-  offscreen.width = img.naturalWidth;
-  offscreen.height = img.naturalHeight;
-  const octx = offscreen.getContext('2d');
-  octx.drawImage(img, 0, 0);
-  
-  const imgData = octx.getImageData(0, 0, offscreen.width, offscreen.height);
-  const d = imgData.data;
-  
-  // Sample the corner pixel as the background color
-  const bgR = d[0], bgG = d[1], bgB = d[2];
-  
-  // Remove pixels close to the background color (within tolerance)
-  const tolerance = 42;
-  for (let i = 0; i < d.length; i += 4) {
-    const dr = Math.abs(d[i] - bgR);
-    const dg = Math.abs(d[i+1] - bgG);
-    const db = Math.abs(d[i+2] - bgB);
-    if (dr < tolerance && dg < tolerance && db < tolerance) {
-      // Fade based on distance from bg color
-      const dist = Math.sqrt(dr*dr + dg*dg + db*db);
-      const alpha = Math.min(255, Math.max(0, (dist / (tolerance * 1.7)) * 255));
-      d[i+3] = alpha;
-    }
-  }
-  
-  octx.putImageData(imgData, 0, 0);
-  img._transparent = offscreen;
-  return offscreen;
-}
-
 // Draw a building or prop
 export function drawBuilding(ctx, img, x, y, isBuilding, isActive, time) {
   if (!img) return;
@@ -239,9 +200,9 @@ export function drawBuilding(ctx, img, x, y, isBuilding, isActive, time) {
   const aspect = img.naturalHeight / img.naturalWidth;
   const renderH = renderW * aspect;
 
-  // Position: bottom-center of the tile
+  // Position: bottom-center of the tile, snug to ground
   const drawX = x - renderW / 2;
-  const drawY = y - renderH + TILE_H / 2 + (isBuilding ? 5 : 8);
+  const drawY = y - renderH + TILE_H / 2 + (isBuilding ? 10 : 14);
 
   // Active glow effect
   if (isActive && isBuilding) {
@@ -259,9 +220,7 @@ export function drawBuilding(ctx, img, x, y, isBuilding, isActive, time) {
     ctx.restore();
   }
 
-  // Draw with background removed
-  const processed = processImageTransparency(img);
-  ctx.drawImage(processed, drawX, drawY, renderW, renderH);
+  ctx.drawImage(img, drawX, drawY, renderW, renderH);
 }
 
 // Warm golden glow behind active buildings
