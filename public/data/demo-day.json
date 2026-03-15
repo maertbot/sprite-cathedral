@@ -1,0 +1,313 @@
+{
+  "date": "2026-03-14",
+  "label": "A day in the life of Maertbot",
+  "eventCount": 51,
+  "events": [
+    {
+      "time": "2026-03-15T06:00:00",
+      "type": "heartbeat",
+      "building": "lighthouse",
+      "desc": "Morning heartbeat: all systems nominal"
+    },
+    {
+      "time": "2026-03-15T07:52:00",
+      "type": "message_received",
+      "building": "post-office",
+      "desc": "Matt: build 6 and 8 please"
+    },
+    {
+      "time": "2026-03-15T07:55:00",
+      "type": "tool_call",
+      "building": "shop",
+      "desc": "Web search: creative archive UI design"
+    },
+    {
+      "time": "2026-03-15T08:00:00",
+      "type": "tool_call",
+      "building": "library",
+      "desc": "Reading Angelfire source files"
+    },
+    {
+      "time": "2026-03-15T08:01:00",
+      "type": "ingestion",
+      "building": "boathouse",
+      "desc": "Ingested @brianluidog tweet"
+    },
+    {
+      "time": "2026-03-15T08:05:00",
+      "type": "tool_call",
+      "building": "shop",
+      "desc": "Building waveform visualizer + ambient shift"
+    },
+    {
+      "time": "2026-03-15T08:10:00",
+      "type": "deploy",
+      "building": "dock-warehouse",
+      "desc": "Deployed Angelfire commit ebc9426"
+    },
+    {
+      "time": "2026-03-15T08:26:00",
+      "type": "memory_write",
+      "building": "chapel",
+      "desc": "Updated MEMORY.md: model strategy (Codex for code)"
+    },
+    {
+      "time": "2026-03-15T09:15:00",
+      "type": "ingestion",
+      "building": "boathouse",
+      "desc": "Ingested @artedeingenio tweet"
+    },
+    {
+      "time": "2026-03-15T10:30:00",
+      "type": "tool_call",
+      "building": "shop",
+      "desc": "Building fragment visual variants (guestbooks, forums, emails, flyers)"
+    },
+    {
+      "time": "2026-03-15T10:50:00",
+      "type": "deploy",
+      "building": "dock-warehouse",
+      "desc": "Deployed Angelfire commit b83198c"
+    },
+    {
+      "time": "2026-03-15T10:56:00",
+      "type": "subagent_start",
+      "building": "cottage-red",
+      "desc": "Spawned: catalog-nc-triangle (10 entries)"
+    },
+    {
+      "time": "2026-03-15T10:56:00",
+      "type": "subagent_start",
+      "building": "cottage-green",
+      "desc": "Spawned: catalog-nc-charlotte (10 entries)"
+    },
+    {
+      "time": "2026-03-15T10:56:00",
+      "type": "subagent_start",
+      "building": "saltbox",
+      "desc": "Spawned: catalog-pnw-eugene (10 entries)"
+    },
+    {
+      "time": "2026-03-15T10:56:00",
+      "type": "subagent_start",
+      "building": "inn",
+      "desc": "Spawned: catalog-pnw-portland (10 entries)"
+    },
+    {
+      "time": "2026-03-15T10:56:00",
+      "type": "subagent_start",
+      "building": "garden-shed",
+      "desc": "Spawned: catalog-pnw-wa (10 entries)"
+    },
+    {
+      "time": "2026-03-15T11:00:00",
+      "type": "subagent_complete",
+      "building": "cottage-red",
+      "desc": "NC Triangle: 10 entries written"
+    },
+    {
+      "time": "2026-03-15T11:00:00",
+      "type": "subagent_complete",
+      "building": "cottage-green",
+      "desc": "NC Charlotte: 10 entries written"
+    },
+    {
+      "time": "2026-03-15T11:01:00",
+      "type": "subagent_complete",
+      "building": "saltbox",
+      "desc": "PNW Eugene: 10 entries written"
+    },
+    {
+      "time": "2026-03-15T11:01:00",
+      "type": "subagent_complete",
+      "building": "inn",
+      "desc": "PNW Portland: 10 entries written"
+    },
+    {
+      "time": "2026-03-15T11:02:00",
+      "type": "subagent_complete",
+      "building": "garden-shed",
+      "desc": "PNW WA: 10 entries written"
+    },
+    {
+      "time": "2026-03-15T11:05:00",
+      "type": "tool_call",
+      "building": "shop",
+      "desc": "QA pass: dedup band/song names, fix cross-refs"
+    },
+    {
+      "time": "2026-03-15T11:10:00",
+      "type": "deploy",
+      "building": "dock-warehouse",
+      "desc": "Deployed 55 entries (commit a539998)"
+    },
+    {
+      "time": "2026-03-15T11:15:00",
+      "type": "memory_write",
+      "building": "chapel",
+      "desc": "Updated memory/2026-03-14.md: Angelfire entries, Big Bend"
+    },
+    {
+      "time": "2026-03-15T12:00:00",
+      "type": "tool_call",
+      "building": "library",
+      "desc": "Web search: Big Bend weather, Fort Davis, White Sands"
+    },
+    {
+      "time": "2026-03-15T12:00:00",
+      "type": "heartbeat",
+      "building": "lighthouse",
+      "desc": "Noon heartbeat: 4 active projects"
+    },
+    {
+      "time": "2026-03-15T12:15:00",
+      "type": "tool_call",
+      "building": "shop",
+      "desc": "Building Word doc: Big Bend itinerary"
+    },
+    {
+      "time": "2026-03-15T12:20:00",
+      "type": "message_sent",
+      "building": "post-office",
+      "desc": "Sent Big Bend itinerary to Matt"
+    },
+    {
+      "time": "2026-03-15T14:51:00",
+      "type": "ingestion",
+      "building": "boathouse",
+      "desc": "Dispatch photo: Abe basketball"
+    },
+    {
+      "time": "2026-03-15T14:53:00",
+      "type": "ingestion",
+      "building": "boathouse",
+      "desc": "Dispatch photo: Anika ABBA + cartwheels"
+    },
+    {
+      "time": "2026-03-15T18:00:00",
+      "type": "subagent_start",
+      "building": "cottage-red",
+      "desc": "Spawned: catalog-nc-deep (11 entries)"
+    },
+    {
+      "time": "2026-03-15T18:00:00",
+      "type": "subagent_start",
+      "building": "cottage-green",
+      "desc": "Spawned: catalog-nc-coast (10 entries)"
+    },
+    {
+      "time": "2026-03-15T18:00:00",
+      "type": "subagent_start",
+      "building": "saltbox",
+      "desc": "Spawned: catalog-pnw-rural-or (11 entries)"
+    },
+    {
+      "time": "2026-03-15T18:00:00",
+      "type": "subagent_start",
+      "building": "inn",
+      "desc": "Spawned: catalog-pnw-seattle-burbs (10 entries)"
+    },
+    {
+      "time": "2026-03-15T18:00:00",
+      "type": "subagent_start",
+      "building": "garden-shed",
+      "desc": "Spawned: catalog-pnw-pdx-deep (10 entries)"
+    },
+    {
+      "time": "2026-03-15T18:00:00",
+      "type": "heartbeat",
+      "building": "lighthouse",
+      "desc": "Evening heartbeat: 117 entries deployed"
+    },
+    {
+      "time": "2026-03-15T18:05:00",
+      "type": "subagent_complete",
+      "building": "cottage-red",
+      "desc": "NC deep: 11 entries (Deer Camera, Gravel Lot...)"
+    },
+    {
+      "time": "2026-03-15T18:05:00",
+      "type": "subagent_complete",
+      "building": "cottage-green",
+      "desc": "NC Coast: 10 entries (Salt Mosquito, Jetty Rot...)"
+    },
+    {
+      "time": "2026-03-15T18:06:00",
+      "type": "subagent_complete",
+      "building": "saltbox",
+      "desc": "Rural OR: 11 entries (Slash Pile, Rim Rock...)"
+    },
+    {
+      "time": "2026-03-15T18:06:00",
+      "type": "subagent_complete",
+      "building": "inn",
+      "desc": "Seattle burbs: 10 entries (Carpet Sample...)"
+    },
+    {
+      "time": "2026-03-15T18:07:00",
+      "type": "subagent_complete",
+      "building": "garden-shed",
+      "desc": "PDX deep: 10 entries (Porch Rot, Sump Pump...)"
+    },
+    {
+      "time": "2026-03-15T18:08:00",
+      "type": "subagent_start",
+      "building": "cottage-red",
+      "desc": "Spawned: catalog-nc-mountains (10 entries)"
+    },
+    {
+      "time": "2026-03-15T18:13:00",
+      "type": "subagent_complete",
+      "building": "cottage-red",
+      "desc": "NC Mountains: 10 entries (Woodsmoke, Frost Heave...)"
+    },
+    {
+      "time": "2026-03-15T18:15:00",
+      "type": "deploy",
+      "building": "dock-warehouse",
+      "desc": "Deployed 117 entries (commit 2c48fcf)"
+    },
+    {
+      "time": "2026-03-15T20:00:00",
+      "type": "tool_call",
+      "building": "shop",
+      "desc": "Sprite Cathedral mockup: dark isometric"
+    },
+    {
+      "time": "2026-03-15T21:45:00",
+      "type": "tool_call",
+      "building": "shop",
+      "desc": "Sprite Cathedral mockup: preppy Cape Cod"
+    },
+    {
+      "time": "2026-03-15T22:00:00",
+      "type": "tool_call",
+      "building": "library",
+      "desc": "Gemini tile generation: 6 buildings"
+    },
+    {
+      "time": "2026-03-15T22:08:00",
+      "type": "tool_call",
+      "building": "library",
+      "desc": "Gemini tile generation: ground + props (12 tiles)"
+    },
+    {
+      "time": "2026-03-15T22:11:00",
+      "type": "subagent_start",
+      "building": "inn",
+      "desc": "Spawned: sprite-cathedral-build"
+    },
+    {
+      "time": "2026-03-15T22:15:00",
+      "type": "subagent_complete",
+      "building": "inn",
+      "desc": "Sprite Cathedral v1 built"
+    },
+    {
+      "time": "2026-03-15T22:17:00",
+      "type": "deploy",
+      "building": "dock-warehouse",
+      "desc": "Deployed Sprite Cathedral v1"
+    }
+  ]
+}

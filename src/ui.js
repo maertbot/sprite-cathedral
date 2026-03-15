@@ -8,21 +8,64 @@ const detailTitle = document.getElementById('detail-title');
 const detailDesc = document.getElementById('detail-desc');
 const detailClose = document.getElementById('detail-close');
 const statusLine = document.getElementById('status-line');
+const overlay = document.getElementById('overlay');
 
 let hoveredBuilding = null;
 let selectedBuilding = null;
+let timelineFill = null;
+let timelineLabel = null;
+let timelineHitbox = null;
+let onSeek = null;
 
 export function initUI() {
   detailClose.addEventListener('click', () => {
     selectedBuilding = null;
     detailPanel.classList.add('hidden');
   });
+
+  if (!document.getElementById('timeline-scrubber')) {
+    const scrubber = document.createElement('div');
+    scrubber.id = 'timeline-scrubber';
+    scrubber.innerHTML = `
+      <div class="timeline-range timeline-range-start">6:00 AM</div>
+      <div class="timeline-track" id="timeline-track">
+        <div class="timeline-fill" id="timeline-fill"></div>
+        <div class="timeline-hitbox" id="timeline-hitbox"></div>
+      </div>
+      <div class="timeline-label" id="timeline-label">6:00 AM</div>
+      <div class="timeline-range timeline-range-end">11:00 PM</div>
+    `;
+    overlay.appendChild(scrubber);
+  }
+
+  timelineFill = document.getElementById('timeline-fill');
+  timelineLabel = document.getElementById('timeline-label');
+  timelineHitbox = document.getElementById('timeline-hitbox');
+
+  timelineHitbox.addEventListener('click', (event) => {
+    if (!onSeek) return;
+    const rect = timelineHitbox.getBoundingClientRect();
+    const fraction = (event.clientX - rect.left) / rect.width;
+    onSeek(Math.min(1, Math.max(0, fraction)));
+  });
 }
 
-export function updateStatusLine(activityState) {
-  const activeCount = Object.values(activityState).filter(s => s.active).length;
-  const totalDistricts = 5; // residential, main st, the green, harbor approach, harbor
-  statusLine.textContent = `${activeCount} active jobs · ${totalDistricts} districts · est. 2026`;
+export function setTimelineSeekHandler(handler) {
+  onSeek = handler;
+}
+
+export function updateTimeline(progress, label) {
+  if (timelineFill) {
+    timelineFill.style.width = `${Math.min(100, Math.max(0, progress * 100))}%`;
+  }
+  if (timelineLabel) {
+    timelineLabel.textContent = label;
+  }
+}
+
+export function updateStatusLine(stats) {
+  const lastDesc = stats.lastEvent?.desc || 'awaiting first event';
+  statusLine.textContent = `${stats.totalEvents} events · ${stats.activeCount} active · last: ${lastDesc}`;
 }
 
 export function showTooltip(building, screenX, screenY) {
@@ -32,7 +75,6 @@ export function showTooltip(building, screenX, screenY) {
     return;
   }
   if (hoveredBuilding === building) {
-    // Just update position
     tooltip.style.left = (screenX + 15) + 'px';
     tooltip.style.top = (screenY - 30) + 'px';
     return;

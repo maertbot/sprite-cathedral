@@ -42,7 +42,7 @@ canvas {
 
 #status-line {
   font-size: 13px;
-  color: rgba(255, 248, 240, 0.5);
+  color: rgba(255, 248, 240, 0.6);
   margin-top: 4px;
   letter-spacing: 0.5px;
 }
@@ -67,7 +67,7 @@ canvas {
 
 #detail-panel {
   position: absolute;
-  bottom: 60px;
+  bottom: 88px;
   right: 32px;
   background: rgba(30, 30, 50, 0.94);
   color: #fff8f0;
@@ -109,9 +109,60 @@ canvas {
   cursor: pointer;
 }
 
+#timeline-scrubber {
+  position: absolute;
+  left: 50%;
+  bottom: 34px;
+  transform: translateX(-50%);
+  width: min(720px, calc(100vw - 120px));
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  pointer-events: auto;
+}
+
+.timeline-range,
+.timeline-label {
+  font-size: 11px;
+  letter-spacing: 0.6px;
+  color: rgba(255, 248, 240, 0.78);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  white-space: nowrap;
+}
+
+.timeline-label {
+  min-width: 58px;
+  text-align: right;
+}
+
+.timeline-track {
+  position: relative;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(18, 18, 26, 0.52);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+.timeline-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  background: linear-gradient(90deg, rgba(232, 176, 79, 0.85), rgba(255, 209, 122, 0.95));
+  box-shadow: 0 0 14px rgba(255, 196, 92, 0.4);
+}
+
+.timeline-hitbox {
+  position: absolute;
+  inset: -8px;
+  cursor: pointer;
+}
+
 #footer {
   position: absolute;
-  bottom: 18px;
+  bottom: 12px;
   width: 100%;
   text-align: center;
   font-size: 11px;
