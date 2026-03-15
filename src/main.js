@@ -8,7 +8,7 @@ import {
   SPRITE_PATHS, SPRITE_COLORS
 } from './scene.js';
 import {
-  TILE_H,
+  TILE_W, TILE_H, BUILDING_RENDER_W,
   gridToScreen, screenToGrid, calcOffset,
   drawGroundTile, drawBuilding, drawSprite,
   drawTimeTint, drawVignette
@@ -24,6 +24,7 @@ import {
 } from './events.js';
 
 const ASSET_BASE = import.meta.env.BASE_URL + 'assets/';
+const TERRAIN_IMG_PATH = 'terrain-v1.png';
 const GAZEBO_HOME = { row: 6, col: 7 };
 const LABEL_DURATION_MS = 3000;
 
@@ -32,21 +33,21 @@ const TILE_MANIFEST = {
   'path': 'ground/path.png',
   'cobblestone': 'ground/cobblestone.png',
   'water': 'ground/water.png',
-  'cottage-red': 'buildings/cottage-red.png',
-  'cottage-green': 'buildings/cottage-green.png',
-  'saltbox': 'buildings/saltbox.png',
-  'shop': 'buildings/shop.png',
-  'post-office': 'buildings/post-office.png',
-  'general-store': 'buildings/general-store.png',
-  'clubhouse': 'buildings/clubhouse.png',
-  'garden-shed': 'buildings/garden-shed.png',
-  'lighthouse': 'buildings/lighthouse.png',
-  'gazebo': 'buildings/gazebo.png',
-  'boathouse': 'buildings/boathouse.png',
-  'chapel': 'buildings/chapel.png',
-  'library': 'buildings/library.png',
-  'inn': 'buildings/inn.png',
-  'dock-warehouse': 'buildings/dock-warehouse.png',
+  'cottage-red': 'buildings-v3/cottage-red.png',
+  'cottage-green': 'buildings-v3/cottage-green.png',
+  'saltbox': 'buildings-v3/saltbox.png',
+  'shop': 'buildings-v3/shop.png',
+  'post-office': 'buildings-v3/post-office.png',
+  'general-store': 'buildings-v3/general-store.png',
+  'clubhouse': 'buildings-v3/clubhouse.png',
+  'garden-shed': 'buildings-v3/garden-shed.png',
+  'lighthouse': 'buildings-v3/lighthouse.png',
+  'gazebo': 'buildings-v3/gazebo.png',
+  'boathouse': 'buildings-v3/boathouse.png',
+  'chapel': 'buildings-v3/chapel.png',
+  'library': 'buildings-v3/library.png',
+  'inn': 'buildings-v3/inn.png',
+  'dock-warehouse': 'buildings-v3/dock-warehouse.png',
   'tree-round': 'props/tree-round.png',
   'tree-evergreen': 'props/tree-evergreen.png',
   'bench': 'props/bench.png',
@@ -59,7 +60,10 @@ const TILE_MANIFEST = {
 
 async function loadImages() {
   const images = {};
-  const entries = Object.entries(TILE_MANIFEST);
+  const entries = [
+    ...Object.entries(TILE_MANIFEST),
+    ['__terrain__', TERRAIN_IMG_PATH],
+  ];
   let loaded = 0;
   const statusEl = document.getElementById('status-line');
 
@@ -208,7 +212,7 @@ function drawEventLabel(ctx, label, buildingCell, images, offset, now) {
   const t = Math.min(1, age / LABEL_DURATION_MS);
   const alpha = 1 - t;
   const floatY = t * 18;
-  const renderW = img ? 115 : 100;
+  const renderW = img ? BUILDING_RENDER_W : 100;
   const renderH = img ? renderW * (img.naturalHeight / img.naturalWidth) : 90;
   const x = pos.x;
   const y = pos.y - renderH + TILE_H / 2 - 8 - floatY;
@@ -238,6 +242,25 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.arcTo(x, y + h, x, y, r);
   ctx.arcTo(x, y, x + w, y, r);
   ctx.closePath();
+}
+
+function getGridBounds(offset) {
+  const topLeft = gridToScreen(0, 0, offset.x, offset.y);
+  const topRight = gridToScreen(GRID_COLS - 1, 0, offset.x, offset.y);
+  const bottomLeft = gridToScreen(0, GRID_ROWS - 1, offset.x, offset.y);
+  const bottomRight = gridToScreen(GRID_COLS - 1, GRID_ROWS - 1, offset.x, offset.y);
+
+  const minX = Math.min(topLeft.x, bottomLeft.x) - TILE_W / 2;
+  const maxX = Math.max(topRight.x, bottomRight.x) + TILE_W / 2;
+  const minY = Math.min(topLeft.y, topRight.y) - TILE_H / 2;
+  const maxY = Math.max(bottomLeft.y, bottomRight.y) + TILE_H / 2;
+
+  return {
+    minX,
+    minY,
+    width: maxX - minX,
+    height: maxY - minY,
+  };
 }
 
 async function main() {
@@ -350,9 +373,9 @@ async function main() {
         const pos = gridToScreen(cell.col, cell.row, offset.x, offset.y);
         const img = images[cell.building];
         if (img) {
-          const renderW = 120;
+          const renderW = BUILDING_RENDER_W;
           const renderH = renderW * (img.naturalHeight / img.naturalWidth);
-          particles.spawnSmoke(pos.x + 10, pos.y - renderH + TILE_H / 2 + 15);
+          particles.spawnSmoke(pos.x + 10, pos.y - renderH + TILE_H / 2 + 25);
         }
       }
     }
@@ -364,12 +387,18 @@ async function main() {
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, w, h);
 
-    drawWaterShimmer(ctx, offset, w, h, now);
-
-    for (const cell of cells) {
-      const pos = gridToScreen(cell.col, cell.row, offset.x, offset.y);
-      drawGroundTile(ctx, cell.ground, pos.x, pos.y, now);
+    const terrainImg = images.__terrain__;
+    if (terrainImg) {
+      const bounds = getGridBounds(offset);
+      ctx.drawImage(terrainImg, bounds.minX, bounds.minY, bounds.width, bounds.height);
+    } else {
+      for (const cell of cells) {
+        const pos = gridToScreen(cell.col, cell.row, offset.x, offset.y);
+        drawGroundTile(ctx, cell.ground, pos.x, pos.y, now);
+      }
     }
+
+    drawWaterShimmer(ctx, offset, w, h, now);
 
     const drawables = [];
     for (const cell of cells) {

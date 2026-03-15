@@ -1,13 +1,13 @@
 // Isometric renderer — handles projection, tile drawing, sprites
 
-import { GRID_COLS, GRID_ROWS, BUILDINGS } from './scene.js';
+import { GRID_COLS, GRID_ROWS } from './scene.js';
 
 // Isometric tile dimensions (screen space)
 export const TILE_W = 120;  // width of isometric diamond
 export const TILE_H = 60;   // height of isometric diamond
 
-// Building render size — buildings are roughly 100-130px wide
-const BUILDING_RENDER_W = 115;
+// Building render size — buildings are intentionally prominent against the terrain
+export const BUILDING_RENDER_W = 160;
 const PROP_RENDER_W = 48;
 
 // Convert grid coords to screen (isometric) coords
@@ -210,7 +210,7 @@ export function drawBuilding(ctx, img, x, y, isBuilding, isActive, time) {
 
   // Position: bottom-center of the tile, snug to ground
   const drawX = x - renderW / 2;
-  const drawY = y - renderH + TILE_H / 2 + (isBuilding ? 10 : 14);
+  const drawY = y - renderH + TILE_H / 2 + (isBuilding ? 20 : 14);
 
   // Active glow effect
   if (isActive && isBuilding) {
@@ -220,10 +220,10 @@ export function drawBuilding(ctx, img, x, y, isBuilding, isActive, time) {
   // Ground shadow under building
   if (isBuilding) {
     ctx.save();
-    ctx.globalAlpha = 0.18;
+    ctx.globalAlpha = 0.22;
     ctx.fillStyle = '#1a2a1a';
     ctx.beginPath();
-    ctx.ellipse(x + 4, y + 6, renderW * 0.38, TILE_H * 0.28, 0, 0, Math.PI * 2);
+    ctx.ellipse(x + 4, y + 8, renderW * 0.45, TILE_H * 0.34, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
   }
