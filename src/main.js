@@ -33,9 +33,14 @@ const TILE_MANIFEST = {
   'post-office': 'buildings/post-office.png',
   'general-store': 'buildings/general-store.png',
   'clubhouse': 'buildings/clubhouse.png',
+  'garden-shed': 'buildings/garden-shed.png',
   'lighthouse': 'buildings/lighthouse.png',
   'gazebo': 'buildings/gazebo.png',
   'boathouse': 'buildings/boathouse.png',
+  'chapel': 'buildings/chapel.png',
+  'library': 'buildings/library.png',
+  'inn': 'buildings/inn.png',
+  'dock-warehouse': 'buildings/dock-warehouse.png',
   // Props
   'tree-round': 'props/tree-round.png',
   'tree-evergreen': 'props/tree-evergreen.png',
@@ -164,7 +169,7 @@ async function main() {
 
   // Init sprites
   const sprites = [];
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < SPRITE_PATHS.length; i++) {
     sprites.push(new Sprite(i, i));
   }
 
@@ -326,8 +331,10 @@ async function main() {
 
 // Subtle water shimmer effect
 function drawWaterShimmer(ctx, offset, w, h, time) {
-  // Draw some ambient water reflection in the harbor area
-  const shimmerY = offset.y + (8 + 4) * (TILE_H / 2) + 4 * (TILE_H / 2);
+  // Draw ambient harbor reflection aligned to the bottom two water rows
+  const harborStartRow = GRID_ROWS - 2;
+  const sample = gridToScreen(0, harborStartRow, offset.x, offset.y);
+  const shimmerY = sample.y - TILE_H;
   if (shimmerY < h) {
     const alpha = 0.03 + 0.02 * Math.sin(time / 2000);
     ctx.fillStyle = `rgba(100, 180, 220, ${alpha})`;

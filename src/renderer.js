@@ -28,14 +28,22 @@ export function screenToGrid(sx, sy, offsetX, offsetY) {
 
 // Calculate camera offset to center the grid
 export function calcOffset(canvasW, canvasH) {
-  // Center of grid in screen space
-  const centerCol = GRID_COLS / 2;
-  const centerRow = GRID_ROWS / 2;
-  const cx = (centerCol - centerRow) * (TILE_W / 2);
-  const cy = (centerCol + centerRow) * (TILE_H / 2);
+  const top = gridToScreen(0, 0, 0, 0);
+  const right = gridToScreen(GRID_COLS - 1, 0, 0, 0);
+  const bottom = gridToScreen(GRID_COLS - 1, GRID_ROWS - 1, 0, 0);
+  const left = gridToScreen(0, GRID_ROWS - 1, 0, 0);
+
+  const minX = Math.min(top.x, right.x, bottom.x, left.x) - TILE_W / 2;
+  const maxX = Math.max(top.x, right.x, bottom.x, left.x) + TILE_W / 2;
+  const minY = Math.min(top.y, right.y, bottom.y, left.y) - TILE_H / 2;
+  const maxY = Math.max(top.y, right.y, bottom.y, left.y) + TILE_H / 2;
+
+  const gridW = maxX - minX;
+  const gridH = maxY - minY;
+
   return {
-    x: canvasW / 2 - cx,
-    y: canvasH / 2 - cy - 30, // slight upward shift
+    x: (canvasW - gridW) / 2 - minX,
+    y: (canvasH - gridH) / 2 - minY - 48,
   };
 }
 
