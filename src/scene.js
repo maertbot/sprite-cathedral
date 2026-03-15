@@ -41,33 +41,35 @@ export const PROPS = {
   'sailboat':       { name: 'Sailboat' },
 };
 
-// The scene grid — row by row
+// The scene grid — sparse layout aligned to terrain-v1.png features
+// Terrain image provides all visual ground, trees, paths, and props.
+// Grid cells only define building/prop placement positions for interactivity.
 // Each cell: [ground, building|null, prop|null]
 export const SCENE_MAP = [
-  // Row 0 — northern tree line
-  [[G,null,'tree-evergreen'], [G,null,'tree-round'],     [G,null,'tree-evergreen'], [G,null,'tree-round'],     [G,null,'tree-evergreen'], [G,null,'tree-round'],     [G,null,'tree-evergreen'], [G,null,'tree-round'],     [G,null,'tree-evergreen'], [G,null,'tree-round'],     [G,null,'tree-evergreen'], [G,null,'tree-round'],     [G,null,'tree-evergreen'], [G,null,'tree-round']],
-  // Row 1 — residential ridge
-  [[G,null,'tree-round'],     [G,null,'fence-picket'],   [G,'cottage-red',null],    [G,null,'mailbox'],        [G,null,'tree-round'],     [G,null,'fence-picket'],   [G,'cottage-green',null],  [G,null,'mailbox'],        [G,null,'tree-evergreen'], [G,null,'fence-picket'],   [G,'cottage-red',null],    [G,null,'mailbox'],        [G,null,'fence-picket'],   [G,null,'tree-round']],
-  // Row 2 — residential lane
-  [[G,null,'tree-evergreen'], [G,null,'tree-round'],     [G,null,'fence-picket'],   [G,null,'tree-round'],     [G,'saltbox',null],        [G,null,'fence-picket'],   [P,null,null],             [G,null,'tree-round'],     [G,'inn',null],            [G,null,'fence-picket'],   [G,null,'tree-round'],     [G,null,'fence-picket'],   [G,null,'tree-evergreen'], [G,null,'tree-round']],
-  // Row 3 — path down from the homes
-  [[G,null,'tree-round'],     [G,null,null],             [P,null,null],             [P,null,null],             [P,null,null],            [P,null,null],             [P,null,null],             [P,null,null],             [P,null,null],             [P,null,null],             [P,null,null],             [P,null,null],             [G,null,null],             [G,null,'tree-evergreen']],
-  // Row 4 — Main Street upper bend
-  [[G,null,'tree-evergreen'], [G,null,null],             [P,null,null],             [C,'shop',null],           [C,null,'lamppost'],      [C,null,null],             [C,'post-office',null],    [C,null,'lamppost'],       [C,null,null],             [C,null,null],             [C,'library',null],        [P,null,null],             [G,null,null],             [G,null,'tree-round']],
-  // Row 5 — Main Street lower bend / approach to the Green
-  [[G,null,'tree-round'],     [G,'clubhouse',null],      [P,null,null],             [C,null,null],             [C,null,null],            [C,'general-store',null],  [P,null,null],             [G,null,'bench'],          [G,null,'flagpole'],       [C,null,null],             [C,'chapel',null],         [P,null,null],             [G,null,'tree-round'],     [G,null,'tree-evergreen']],
-  // Row 6 — the Green
-  [[G,null,'tree-evergreen'], [G,null,null],             [P,null,null],             [G,null,'garden-shed'],    [G,null,'lamppost'],      [G,null,'bench'],          [G,null,null],             [G,'gazebo',null],         [G,null,null],             [G,null,'bench'],          [G,null,'lamppost'],       [P,null,null],             [G,null,null],             [G,null,'tree-round']],
-  // Row 7 — path to harbor
-  [[G,null,'tree-round'],     [G,null,null],             [G,null,'tree-round'],     [P,null,null],             [P,null,null],            [P,null,null],             [P,null,null],             [P,null,null],             [P,null,null],             [P,null,null],             [P,null,null],             [P,null,null],             [G,null,null],             [G,null,'tree-evergreen']],
-  // Row 8 — village edge before the harbor
-  [[G,null,'tree-evergreen'], [G,null,'fence-picket'],   [G,null,null],             [G,null,null],             [G,null,null],            [G,null,null],             [P,null,null],             [G,null,null],             [G,null,null],             [G,null,null],             [P,null,null],             [G,null,null],             [G,null,'fence-picket'],   [G,null,'tree-round']],
-  // Row 9 — harbor front
-  [[G,null,'tree-round'],     [G,null,null],             [G,null,null],             [G,null,null],             [G,null,null],            [P,null,null],             [G,'boathouse',null],      [P,null,null],             [G,null,null],             [P,null,null],             [G,'dock-warehouse',null], [P,null,null],             [G,null,null],             [G,null,'tree-evergreen']],
-  // Row 10 — waterfront / piers
-  [[W,null,'tree-evergreen'], [W,null,null],             [W,'lighthouse',null],     [W,null,null],             [W,null,null],            [W,null,'sailboat'],       [W,null,null],             [W,null,null],             [W,null,null],             [W,null,null],             [W,null,null],             [W,null,null],             [W,null,null],             [W,null,'tree-round']],
-  // Row 11 — open water with framed edge
-  [[W,null,'tree-round'],     [W,null,'tree-evergreen'], [W,null,null],             [W,null,null],             [W,null,null],            [W,null,null],             [W,null,null],             [W,null,null],             [W,null,null],             [W,null,null],             [W,null,null],             [W,null,null],             [W,null,'tree-evergreen'], [W,null,'tree-round']],
+  // Row 0 — upper residential clearing (terrain has open pads here)
+  [[G,null,null], [G,null,null], [G,null,null],           [G,null,null], [G,'cottage-green',null], [G,null,null], [G,null,null], [G,'saltbox',null],      [G,null,null], [G,null,null], [G,null,null], [G,null,null], [G,null,null], [G,null,null]],
+  // Row 1 — residential area
+  [[G,null,null], [G,null,null], [G,'cottage-red',null],  [G,null,null], [G,null,null],            [G,null,null], [G,null,null], [G,null,null],           [G,'inn',null],[G,null,null], [G,null,null], [G,null,null], [G,null,null], [G,null,null]],
+  // Row 2 — along the main road (terrain road runs diag here)
+  [[G,null,null], [G,'chapel',null], [G,null,null],       [G,'shop',null], [G,null,null],          [G,null,null], [G,'post-office',null], [G,null,null],  [G,null,null], [G,null,null], [G,null,null], [G,null,null], [G,null,null], [G,null,null]],
+  // Row 3 — road fork area
+  [[G,null,null], [G,null,null], [G,null,null],           [G,null,null], [G,null,null],            [G,null,null], [G,null,null], [G,null,null],           [G,'library',null], [G,null,null], [G,null,null], [G,null,null], [G,null,null], [G,null,null]],
+  // Row 4 — town center / main street south
+  [[G,null,null], [G,null,null], [G,null,null],           [G,'general-store',null], [G,null,null],  [G,null,null], [G,null,null], [G,'clubhouse',null],   [G,null,null], [G,null,null], [G,null,null], [W,null,null], [W,null,null], [W,null,null]],
+  // Row 5 — approach to the green
+  [[G,null,null], [G,null,null], [G,'garden-shed',null],  [G,null,null], [G,null,null],            [G,null,null], [G,null,null], [G,null,null],           [G,null,null], [G,null,null], [W,null,null], [W,null,null], [W,null,null], [W,null,null]],
+  // Row 6 — the village green
+  [[G,null,null], [G,null,null], [G,null,null],           [G,null,null], [G,null,null],            [G,'gazebo','flagpole'], [G,null,null], [G,null,null], [G,null,null], [W,null,null], [W,null,null], [W,null,null], [W,null,null], [W,null,null]],
+  // Row 7 — harbor approach
+  [[G,null,null], [G,null,null], [G,null,null],           [G,null,null], [G,'boathouse',null],     [G,null,null], [G,'dock-warehouse',null], [W,null,null], [W,null,null], [W,null,null], [W,null,null], [W,null,null], [W,null,null], [W,null,null]],
+  // Row 8 — shoreline
+  [[G,null,null], [G,null,null], [G,null,null],           [G,null,null], [G,null,null],            [W,null,null], [W,null,null], [W,null,null],           [W,null,null], [W,null,null], [W,null,null], [W,null,null], [W,null,null], [W,null,null]],
+  // Row 9 — water with lighthouse
+  [[G,null,null], [G,null,null], [W,'lighthouse',null],   [W,null,null], [W,null,null],            [W,null,'sailboat'], [W,null,null], [W,null,null],    [W,null,null], [W,null,null], [W,null,null], [W,null,null], [W,null,null], [W,null,null]],
+  // Row 10 — open water
+  [[W,null,null], [W,null,null], [W,null,null],           [W,null,null], [W,null,null],            [W,null,null], [W,null,null], [W,null,null],           [W,null,null], [W,null,null], [W,null,null], [W,null,null], [W,null,null], [W,null,null]],
+  // Row 11 — open water
+  [[W,null,null], [W,null,null], [W,null,null],           [W,null,null], [W,null,null],            [W,null,null], [W,null,null], [W,null,null],           [W,null,null], [W,null,null], [W,null,null], [W,null,null], [W,null,null], [W,null,null]],
 ];
 
 // Parse scene map into structured data
@@ -117,25 +119,25 @@ export function tickActivity(state, time) {
   return state;
 }
 
-// Sprite paths — predefined routes between districts
+// Sprite paths — routes between buildings, aligned to terrain roads
 export const SPRITE_PATHS = [
-  // Residential → Main Street
-  [{row:1,col:2},{row:2,col:3},{row:3,col:3},{row:4,col:3}],
-  [{row:1,col:6},{row:2,col:6},{row:3,col:6},{row:4,col:6}],
-  [{row:2,col:8},{row:3,col:8},{row:4,col:9},{row:4,col:10}],
+  // Residential → Main Street (cottages to shop/post-office)
+  [{row:1,col:2},{row:2,col:2},{row:2,col:3}],
+  [{row:0,col:4},{row:1,col:4},{row:2,col:4},{row:2,col:5},{row:2,col:6}],
+  [{row:0,col:7},{row:1,col:7},{row:2,col:7},{row:2,col:6}],
+  [{row:1,col:8},{row:2,col:8},{row:3,col:8}],
 
-  // Main Street → The Green
-  [{row:4,col:3},{row:5,col:4},{row:5,col:5},{row:6,col:6},{row:6,col:7}],
-  [{row:4,col:6},{row:5,col:6},{row:6,col:7}],
-  [{row:5,col:10},{row:6,col:10},{row:6,col:9},{row:6,col:8},{row:6,col:7}],
+  // Main Street → Village Green
+  [{row:2,col:3},{row:3,col:3},{row:4,col:3},{row:5,col:4},{row:6,col:5}],
+  [{row:2,col:6},{row:3,col:6},{row:4,col:6},{row:5,col:5},{row:6,col:5}],
+  [{row:4,col:7},{row:5,col:6},{row:6,col:5}],
 
   // Green → Harbor
-  [{row:6,col:7},{row:7,col:7},{row:7,col:6},{row:8,col:6},{row:9,col:6}],
-  [{row:6,col:7},{row:7,col:8},{row:7,col:9},{row:8,col:10},{row:9,col:10}],
-  [{row:6,col:7},{row:7,col:7},{row:7,col:6},{row:8,col:6},{row:9,col:5},{row:10,col:5}],
+  [{row:6,col:5},{row:7,col:5},{row:7,col:4}],
+  [{row:6,col:5},{row:7,col:5},{row:7,col:6}],
 
-  // Clubhouse corner → The Green
-  [{row:5,col:1},{row:5,col:2},{row:6,col:2},{row:7,col:3},{row:7,col:4},{row:7,col:5},{row:7,col:6},{row:6,col:7}],
+  // Library loop
+  [{row:3,col:8},{row:4,col:7},{row:5,col:6},{row:6,col:5}],
 ];
 
 // Preppy sprite colors

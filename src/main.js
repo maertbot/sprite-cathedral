@@ -25,7 +25,7 @@ import {
 
 const ASSET_BASE = import.meta.env.BASE_URL + 'assets/';
 const TERRAIN_IMG_PATH = 'terrain-v1.png';
-const GAZEBO_HOME = { row: 6, col: 7 };
+const GAZEBO_HOME = { row: 6, col: 5 };
 const LABEL_DURATION_MS = 3000;
 
 const TILE_MANIFEST = {
