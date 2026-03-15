@@ -13,19 +13,19 @@ export class ParticleSystem {
     this.canvasH = h;
   }
 
-  // Spawn ambient golden pollen particles
+  // Spawn ambient golden pollen particles — subtle, sparse
   spawnPollen() {
-    const maxPollen = 60;
+    const maxPollen = 12;
     while (this.pollen.length < maxPollen) {
       this.pollen.push({
         x: Math.random() * this.canvasW,
         y: Math.random() * this.canvasH,
-        vx: (Math.random() - 0.3) * 0.3,
-        vy: -Math.random() * 0.2 - 0.05,
-        size: Math.random() * 3 + 1,
-        alpha: Math.random() * 0.5 + 0.15,
-        life: Math.random() * 1000 + 500,
-        maxLife: 1500,
+        vx: (Math.random() - 0.3) * 0.15,
+        vy: -Math.random() * 0.1 - 0.02,
+        size: Math.random() * 1.5 + 0.5,
+        alpha: Math.random() * 0.25 + 0.08,
+        life: Math.random() * 2000 + 1000,
+        maxLife: 3000,
         hue: Math.random() * 30 + 35, // gold range
       });
     }

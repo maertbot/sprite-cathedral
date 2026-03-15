@@ -7,8 +7,8 @@ export const TILE_W = 120;  // width of isometric diamond
 export const TILE_H = 60;   // height of isometric diamond
 
 // Building render size — buildings are roughly 100-130px wide
-const BUILDING_RENDER_W = 120;
-const PROP_RENDER_W = 60;
+const BUILDING_RENDER_W = 115;
+const PROP_RENDER_W = 48;
 
 // Convert grid coords to screen (isometric) coords
 export function gridToScreen(col, row, offsetX, offsetY) {
@@ -39,70 +39,157 @@ export function calcOffset(canvasW, canvasH) {
   };
 }
 
-// Ground tile color palettes (canvas-drawn for seamless tiling)
-const GROUND_COLORS = {
-  'grass-light':  { fill: '#8db87a', stroke: 'rgba(60,90,50,0.15)', highlight: '#9dc88a' },
-  'path':         { fill: '#d8ccb4', stroke: 'rgba(140,120,90,0.2)', highlight: '#e4d8c0' },
-  'cobblestone':  { fill: '#a09888', stroke: 'rgba(80,70,60,0.25)', highlight: '#b0a898' },
-  'water':        { fill: '#7ab4cc', stroke: 'rgba(40,80,100,0.15)', highlight: '#8ac4dc' },
-};
+// Seeded random for consistent per-tile detail
+function tileRand(x, y, seed) {
+  let h = (x * 374761 + y * 668265 + seed * 982451) | 0;
+  h = ((h >> 16) ^ h) * 0x45d9f3b;
+  h = ((h >> 16) ^ h) * 0x45d9f3b;
+  h = (h >> 16) ^ h;
+  return (h & 0x7fffffff) / 0x7fffffff;
+}
 
-// Draw a single ground tile (canvas-drawn isometric diamond)
-export function drawGroundTile(ctx, groundType, x, y, time) {
-  const colors = GROUND_COLORS[groundType] || GROUND_COLORS['grass-light'];
-  
-  // Main diamond
+// Clip to isometric diamond path
+function clipDiamond(ctx, x, y) {
   ctx.beginPath();
   ctx.moveTo(x, y - TILE_H / 2);
   ctx.lineTo(x + TILE_W / 2, y);
   ctx.lineTo(x, y + TILE_H / 2);
   ctx.lineTo(x - TILE_W / 2, y);
   ctx.closePath();
-  ctx.fillStyle = colors.fill;
-  ctx.fill();
-  ctx.strokeStyle = colors.stroke;
+}
+
+// Draw a single ground tile with rich detail
+export function drawGroundTile(ctx, groundType, x, y, time) {
+  ctx.save();
+  clipDiamond(ctx, x, y);
+  ctx.clip();
+
+  const hw = TILE_W / 2;
+  const hh = TILE_H / 2;
+
+  if (groundType === 'grass-light') {
+    // Base grass gradient (light to slightly darker, top-left lighting)
+    const grd = ctx.createLinearGradient(x - hw, y - hh, x + hw, y + hh);
+    grd.addColorStop(0, '#8ebe78');
+    grd.addColorStop(0.5, '#7daa6a');
+    grd.addColorStop(1, '#6e9a5c');
+    ctx.fillStyle = grd;
+    ctx.fillRect(x - hw, y - hh, TILE_W, TILE_H);
+
+    // Mow stripe (alternating based on position)
+    const stripe = (Math.floor(x / 60) + Math.floor(y / 30)) % 2 === 0;
+    if (stripe) {
+      ctx.fillStyle = 'rgba(100, 180, 80, 0.12)';
+      ctx.fillRect(x - hw, y - hh, TILE_W, TILE_H);
+    }
+
+    // Grass detail — tiny texture dots
+    ctx.fillStyle = 'rgba(50, 80, 40, 0.08)';
+    for (let i = 0; i < 8; i++) {
+      const dx = (tileRand(x, y, i * 3) - 0.5) * TILE_W * 0.7;
+      const dy = (tileRand(x, y, i * 3 + 1) - 0.5) * TILE_H * 0.7;
+      const sz = tileRand(x, y, i * 3 + 2) * 2 + 1;
+      ctx.beginPath();
+      ctx.arc(x + dx, y + dy, sz, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    // Lighter highlights
+    ctx.fillStyle = 'rgba(160, 220, 120, 0.1)';
+    for (let i = 0; i < 4; i++) {
+      const dx = (tileRand(x, y, i * 5 + 100) - 0.5) * TILE_W * 0.5;
+      const dy = (tileRand(x, y, i * 5 + 101) - 0.5) * TILE_H * 0.5;
+      ctx.beginPath();
+      ctx.arc(x + dx, y + dy, 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+  } else if (groundType === 'path') {
+    // Oyster shell / gravel path
+    const grd = ctx.createLinearGradient(x - hw, y - hh, x + hw, y + hh);
+    grd.addColorStop(0, '#ddd2bc');
+    grd.addColorStop(0.5, '#d0c4a8');
+    grd.addColorStop(1, '#c4b898');
+    ctx.fillStyle = grd;
+    ctx.fillRect(x - hw, y - hh, TILE_W, TILE_H);
+
+    // Gravel speckle
+    for (let i = 0; i < 12; i++) {
+      const dx = (tileRand(x, y, i * 7) - 0.5) * TILE_W * 0.7;
+      const dy = (tileRand(x, y, i * 7 + 1) - 0.5) * TILE_H * 0.7;
+      const shade = tileRand(x, y, i * 7 + 2);
+      ctx.fillStyle = shade > 0.5 ? 'rgba(180, 170, 150, 0.3)' : 'rgba(100, 90, 70, 0.1)';
+      const sz = tileRand(x, y, i * 7 + 3) * 2 + 0.5;
+      ctx.beginPath();
+      ctx.arc(x + dx, y + dy, sz, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+  } else if (groundType === 'cobblestone') {
+    // Warm gray cobblestones
+    const grd = ctx.createLinearGradient(x - hw, y - hh, x + hw, y + hh);
+    grd.addColorStop(0, '#a89888');
+    grd.addColorStop(0.5, '#9a8a7a');
+    grd.addColorStop(1, '#8c7e70');
+    ctx.fillStyle = grd;
+    ctx.fillRect(x - hw, y - hh, TILE_W, TILE_H);
+
+    // Individual cobbles
+    ctx.strokeStyle = 'rgba(60, 50, 40, 0.15)';
+    ctx.lineWidth = 0.5;
+    for (let i = 0; i < 6; i++) {
+      const dx = (tileRand(x, y, i * 11) - 0.5) * TILE_W * 0.6;
+      const dy = (tileRand(x, y, i * 11 + 1) - 0.5) * TILE_H * 0.6;
+      const w = tileRand(x, y, i * 11 + 2) * 8 + 6;
+      const h = tileRand(x, y, i * 11 + 3) * 4 + 3;
+      ctx.beginPath();
+      ctx.ellipse(x + dx, y + dy, w, h, 0.3, 0, Math.PI * 2);
+      ctx.stroke();
+      // Highlight on top
+      ctx.fillStyle = 'rgba(180, 170, 155, 0.12)';
+      ctx.beginPath();
+      ctx.ellipse(x + dx - 1, y + dy - 1, w * 0.6, h * 0.5, 0.3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+  } else if (groundType === 'water') {
+    // Ocean / harbor water
+    const t = time || 0;
+    const wavePhase = t / 2000 + x * 0.005 + y * 0.008;
+    const grd = ctx.createLinearGradient(x - hw, y - hh, x + hw, y + hh);
+    grd.addColorStop(0, '#6aacc4');
+    grd.addColorStop(0.4, '#5a9cb8');
+    grd.addColorStop(1, '#4a8caa');
+    ctx.fillStyle = grd;
+    ctx.fillRect(x - hw, y - hh, TILE_W, TILE_H);
+
+    // Wave lines
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    ctx.lineWidth = 0.8;
+    for (let i = 0; i < 3; i++) {
+      const wy = y - hh * 0.4 + i * hh * 0.4;
+      const waveOff = Math.sin(wavePhase + i * 1.5) * 4;
+      ctx.beginPath();
+      ctx.moveTo(x - hw * 0.6, wy + waveOff);
+      ctx.quadraticCurveTo(x, wy + waveOff + 3, x + hw * 0.6, wy + waveOff);
+      ctx.stroke();
+    }
+
+    // Shimmer highlight
+    const shimmer = Math.sin(t / 1200 + x * 0.02) * 0.06 + 0.04;
+    ctx.fillStyle = `rgba(255, 255, 255, ${shimmer})`;
+    const sx = x + Math.sin(t / 3000) * 8;
+    ctx.beginPath();
+    ctx.ellipse(sx, y, 6, 2, 0.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  ctx.restore();
+
+  // Diamond edge stroke (outside clip)
+  clipDiamond(ctx, x, y);
+  ctx.strokeStyle = 'rgba(0, 0, 0, 0.06)';
   ctx.lineWidth = 0.5;
   ctx.stroke();
-  
-  // Subtle highlight on top-left edge
-  ctx.beginPath();
-  ctx.moveTo(x, y - TILE_H / 2);
-  ctx.lineTo(x - TILE_W / 2, y);
-  ctx.strokeStyle = colors.highlight;
-  ctx.lineWidth = 1;
-  ctx.stroke();
-  
-  // Lawn stripe pattern for grass tiles
-  if (groundType === 'grass-light') {
-    ctx.save();
-    ctx.globalAlpha = 0.08;
-    ctx.fillStyle = '#4a6a3a';
-    // Diagonal stripe across the diamond
-    ctx.beginPath();
-    ctx.moveTo(x - TILE_W * 0.25, y - TILE_H * 0.25);
-    ctx.lineTo(x + TILE_W * 0.25, y + TILE_H * 0.25);
-    ctx.lineTo(x + TILE_W * 0.15, y + TILE_H * 0.35);
-    ctx.lineTo(x - TILE_W * 0.35, y - TILE_H * 0.15);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-  }
-  
-  // Water shimmer for water tiles
-  if (groundType === 'water' && time) {
-    ctx.save();
-    const shimmer = Math.sin(time / 1500 + x * 0.01 + y * 0.01) * 0.06 + 0.04;
-    ctx.globalAlpha = shimmer;
-    ctx.fillStyle = '#ffffff';
-    ctx.beginPath();
-    ctx.moveTo(x - 10, y - 2);
-    ctx.lineTo(x + 10, y + 2);
-    ctx.lineTo(x + 8, y + 4);
-    ctx.lineTo(x - 12, y);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-  }
 }
 
 // Remove sage-green background from tile images at load time
@@ -126,7 +213,7 @@ function processImageTransparency(img) {
   const bgR = d[0], bgG = d[1], bgB = d[2];
   
   // Remove pixels close to the background color (within tolerance)
-  const tolerance = 35;
+  const tolerance = 42;
   for (let i = 0; i < d.length; i += 4) {
     const dr = Math.abs(d[i] - bgR);
     const dg = Math.abs(d[i+1] - bgG);
@@ -159,6 +246,17 @@ export function drawBuilding(ctx, img, x, y, isBuilding, isActive, time) {
   // Active glow effect
   if (isActive && isBuilding) {
     drawActiveGlow(ctx, x, y - renderH / 2 + TILE_H / 2, renderW, renderH, time);
+  }
+
+  // Ground shadow under building
+  if (isBuilding) {
+    ctx.save();
+    ctx.globalAlpha = 0.18;
+    ctx.fillStyle = '#1a2a1a';
+    ctx.beginPath();
+    ctx.ellipse(x + 4, y + 6, renderW * 0.38, TILE_H * 0.28, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
   }
 
   // Draw with background removed
@@ -278,11 +376,11 @@ export function drawTimeTint(ctx, w, h) {
   ctx.fillRect(0, 0, w, h);
 }
 
-// Draw vignette
+// Draw vignette — very subtle
 export function drawVignette(ctx, w, h) {
-  const grad = ctx.createRadialGradient(w/2, h/2, w * 0.3, w/2, h/2, w * 0.75);
+  const grad = ctx.createRadialGradient(w/2, h/2, w * 0.35, w/2, h/2, w * 0.8);
   grad.addColorStop(0, 'rgba(0,0,0,0)');
-  grad.addColorStop(1, 'rgba(0,0,0,0.35)');
+  grad.addColorStop(1, 'rgba(0,0,0,0.15)');
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, w, h);
 }
